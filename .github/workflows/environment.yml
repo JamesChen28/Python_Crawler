@@ -1,2 +1,12 @@
+name: Install dependencies
+channels:
+  - defaults
+  - conda-forge
+  - ctools
 dependencies:
-  - request
+  - pandas
+  - bs4
+  - requests
+  - pip
+  - yapf==0.30.0
+  - flake8
