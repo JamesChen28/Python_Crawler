@@ -4,7 +4,7 @@ on:
 # push 到 master 分支時會觸發
   push:
     branches:
-    - main
+    - schedule
   # 排程每天 UTC 16:30 (台灣時間 0:30) 時觸發
   # 語法可上 crontab.guru 查詢
   schedule:
