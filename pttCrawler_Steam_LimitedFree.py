@@ -26,6 +26,22 @@ previousPage = 5
 r = requests.get(url)
 soup = BeautifulSoup(r.text, "html.parser")
 
+# over18
+# ref https://ithelp.ithome.com.tw/articles/10202493
+if len(soup.select('div.over18-button-container')) > 0:
+    btn18 = soup.select('div.over18-button-container')
+    btn18[0]
+
+r = requests.Session()
+payload = {
+    'from':'/bbs/' + str(config_data["board"]) + '/index.html',
+    'yes':'yes'
+}
+
+rpost = r.post('https://www.ptt.cc/ask/over18?from=%2Fbbs%2F' + str(config_data["board"]) + '%2Findex.html', payload)
+rget = r.get('https://www.ptt.cc/bbs/Gossiping/index.html')
+print(rget.text)
+
 # 美化網頁架構
 print(soup.prettify())
 
@@ -99,6 +115,23 @@ url = 'https://www.ptt.cc/bbs/{}/index.html'.format(board)
 # previousPage = 10
 
 
+
+def over18(board):
+    # over18
+    # if len(soup.select('div.over18-button-container')) > 0:
+        
+    r = requests.Session()
+    payload = {
+        'from':'/bbs/' + board + '/index.html',
+        'yes':'yes'
+    }
+    
+    rpost = r.post('https://www.ptt.cc/ask/over18?from=%2Fbbs%2F' + board + '%2Findex.html', payload)
+    rget = r.get('https://www.ptt.cc/bbs/{}/index.html'.format(board))
+    
+    return rget
+
+
 # def get_url 得到當前頁面的keyword網址
 def get_url(url, keyword):
     
@@ -107,6 +140,11 @@ def get_url(url, keyword):
     # 爬網頁
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "html.parser")
+    
+    if len(soup.select('div.over18-button-container')) > 0:
+        r = over18(board)
+        soup = BeautifulSoup(r.text, "html.parser")
+    
     
     # 美化網頁架構
     # print(soup.prettify())
