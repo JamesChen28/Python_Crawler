@@ -87,7 +87,7 @@ with open('pttCrawler_config.json', encoding = 'utf-8') as jsonfile:
 
 board = config_data['board']
 keyword = config_data['keyword']
-previousPage = config_data['previousPage']
+previousPage = int(config_data['previousPage'])
 
 url = 'https://www.ptt.cc/bbs/{}/index.html'.format(board)
 
