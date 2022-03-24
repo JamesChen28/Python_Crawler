@@ -1,7 +1,7 @@
 name: Execute Python Package using Conda
 
 on: 
-  # push 到 schedule 分支時會觸發
+# push 到 schedule 分支時會觸發
   push:
     branches:
     - schedule
