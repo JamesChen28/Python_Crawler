@@ -1,7 +1,7 @@
 name: Execute Python Package using Conda
 
 on: 
-# push 到 schedule 分支時會觸發
+  # push 到 schedule 分支時會觸發
   push:
     branches:
     - schedule
@@ -30,28 +30,41 @@ jobs:
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install dependencies
       run: |
-        # conda env update --file environment.yml --name base
-        python -m pip install --upgrade pip
-        python -m pip install pandas
-        python -m pip install bs4
-        python -m pip install requests
-        python -m pip install pytest
-        python -m pip install flake8
-        # pip install -r requirements.txt
-    - name: Lint with flake8
-      run: |
-        conda install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    #- name: Test with pytest
+        # python -m pip install --upgrade pip
+        # python -m pip install pandas
+        # python -m pip install bs4
+        # python -m pip install requests
+        # python -m pip install pytest
+        # python -m pip install flake8
+        pip install -r .github/workflows/requirements.txt
+    #- name: Lint with flake8
     #  run: |
-    #    conda install pytest
-    #    pytest
+    #    conda install flake8
+    #    # stop the build if there are Python syntax errors or undefined names
+    #    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    #    # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+    #    flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: List files in the repository
       run: |
           ls ${{ github.workspace }}
     - run: echo "? This job's status is ${{ job.status }}."
     - name: Execute pttCrawler_Steam_LimitedFree.py
       run: python pttCrawler_Steam_LimitedFree.py
+    - name: Commit files
+      id: commit
+      run: |
+        git config --local user.email "james5520042000@gmail.com"
+        git config --local user.name "JamesChen28"
+        git add --all
+        if [-z "$(git status --porcelain)"]; then
+           echo "::set-output name=push::false"
+        else
+           git commit -m "Add changes" -a
+           echo "::set-output name=push::true"
+        fi
+      shell: bash
+    - name: Push changes
+      if: steps.commit.outputs.push == 'true'
+      uses: ad-m/github-push-action@schedule
+      with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -193,7 +193,7 @@ flat_dateList = [item for sublist in dateList for item in sublist]
 
 df_output = pd.DataFrame(list(zip(flat_hrefList, flat_titleList, flat_dateList)), columns = ['網址', '標題', '日期'])
 
-df_output.to_csv('PTT_{}版_關鍵字_{}_網址搜尋.csv'.format(board, keyword), index = False, encoding = 'big5')
+df_output.to_csv('PTT_{}版_關鍵字_{}_網址搜尋_{}.csv'.format(board, keyword, time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())), index = False, encoding = 'big5')
 
 
 
